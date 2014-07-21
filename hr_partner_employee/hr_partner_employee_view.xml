@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+        <record id="hr_partner_employee_view_partner_form" model="ir.ui.view">
+            <field name="name">hr_partner_employee_res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="before">
+                    <field name="employee_id" groups="base.group_hr_manager"/>
+                </xpath>
+                
+                <xpath expr="//form/sheet" position="before">
+                    <header>
+                        <button name="create_employee" string="Create employee" type="object" groups="base.group_hr_manager" 
+                            attrs="{'invisible': ['|','|',('employee_id','!=', False),('is_company','=', True),('parent_id','!=', False)]}"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="hr_partner_employee_view_partner_tree" model="ir.ui.view">
+            <field name="name">hr_partner_employee_view_partner_tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after">
+                    <field name="employee_id" groups="base.group_hr_manager"/>
+                </field>
+            </field>
+        </record>
+
+
+       <record id="hr_partner_employee_view_res_partner_filter" model="ir.ui.view">
+            <field name="name">hr_partner_employee_view_res_partner_filter</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <filter name="customer" position="before">
+                    <filter string="Employees" name="employee" domain="[('employee_id','!=',False)]" help="Employee Partners"/>
+                </filter>
+            </field>
+        </record>
+
+
+        <record id="hr_partner_employee_view_employee_tree" model="ir.ui.view">
+            <field name="name">hr_partner_employee_view_employee_tree</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <field name="coach_id" position="after">
+                    <field name="address_home_id" groups="base.group_hr_manager" string='Partner'/>
+                </field>
+            </field>
+        </record>
+    
+    </data>
+</openerp>
